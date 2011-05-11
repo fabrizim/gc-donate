@@ -4,16 +4,22 @@
 function gc_donate( $options=array() ){
     
     static $instances = 0;
-    ob_start();
+    
+    /**
+     * Default options
+     */
+    $currency           = 'USD';
+    $min                = '0.01';
+    $max                = '25000.00';
+    $description        = '';
+    $align              = 'center';
     extract( $options );
+    
     if( @$id && !@$business_id ) $business_id = $id;
     if( !@$business_id || !@$name )    return;
-    if( !@$currency )       $currency = 'USD';
-    if( !@$min )            $min = '0.01';
-    if( !@$max )            $max = '25000.00';
-    if( !@$description )    $description = '';
-    if( !@$align )          $align = 'center';
+    
     $table_style = $align=='center' ? "margin: 0 auto;" : ("margin-".($align=='left'?'right':'left').": auto;");
+    ob_start();
     ?>
 <form action="https://checkout.google.com/cws/v2/Donations/<?= $business_id ?>/checkoutForm" id="BB_BuyButtonForm" method="post" name="BB_BuyButtonForm" onsubmit="return validateAmount(this.item_price_1)" target="_top">
     <input name="item_name_1" type="hidden" value="<?= esc_attr( $name ) ?>">
